@@ -3,104 +3,252 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Roam · Travel Expense Tracker</title>
-  <meta name="description" content="Mindful travel budget and expense tracker.">
+  <title>Roam · Haute Travel Archive & Financial Ledger</title>
+  <meta name="description" content="A cinematic, luxury travel expense tracker and budget archive.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
+  <!-- Three.js for 3D Origami Celestial Centerpiece -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 </head>
 <body>
-  <aside>
-    <a class="brand" href="/">
-      <span class="brand-mark">✳</span> roam
-      <span class="brand-tagline">TRAVEL LIGHT · SPEND WISE</span>
-    </a>
-    <div class="nav-label">YOUR WORKSPACE</div>
-    <div class="nav-active">◈ &nbsp; Trip overview</div>
-    <div class="aside-bottom">
-      A little planning.<br>A lot of possibility.
-      <span>Your next adventure starts here.</span>
-    </div>
-  </aside>
+  <!-- Ambient Cinematic Grain & Warm Lighting Orbs -->
+  <div class="ambient-glow orb-1"></div>
+  <div class="ambient-glow orb-2"></div>
+  <div class="ambient-glow orb-3"></div>
+  <div class="grain-overlay" aria-hidden="true"></div>
 
-  <main>
-    <header>
-      <div class="breadcrumb">WORKSPACE / <b>TRAVEL EXPENSES</b></div>
-      <span class="badge" id="sync-status">● &nbsp; Saved on your server</span>
-    </header>
+  <!-- Luxury Editorial Header Navigation -->
+  <nav class="cinematic-nav">
+    <div class="nav-container">
+      <a class="nav-brand" href="/">
+        <span class="brand-star">✳</span>
+        <span class="brand-title">ROAM</span>
+        <span class="brand-divider">/</span>
+        <span class="brand-sub">TRAVEL ARCHIVE</span>
+      </a>
 
-    <section class="heading">
-      <div>
-        <div class="eyebrow">SERENE EXPLORATION · MINDFUL LIVING</div>
-        <h1>Every adventure,<br>accounted for.</h1>
-        <p>Keep your plans grand and your spending in perspective.</p>
+      <div class="nav-center">
+        <div class="nav-trip-pill" id="nav-trip-indicator" title="Current Expedition">
+          <span class="pill-dot">✦</span>
+          <span id="nav-current-trip-name">Select Trip</span>
+          <span id="nav-current-destination" class="pill-dest"></span>
+        </div>
       </div>
-      <button id="new-trip" class="primary-btn">+ New trip</button>
+
+      <div class="nav-actions">
+        <span class="status-pill">
+          <span class="status-indicator"></span>
+          <span class="status-text">LOCAL VAULT ACTIVE</span>
+        </span>
+        <button id="nav-new-trip" class="btn-gold-outline" aria-label="Create New Expedition">
+          + New Expedition
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Exhibition Section with 3D Origami Centerpiece -->
+  <header class="hero-section">
+    <div class="hero-grid">
+      <!-- Left Editorial Column -->
+      <div class="hero-content">
+        <div class="hero-eyebrow">
+          <span class="eyebrow-num">01</span>
+          <span class="eyebrow-line"></span>
+          <span class="eyebrow-text">CURATED EXPEDITIONS & FINANCIAL HARMONY</span>
+        </div>
+
+        <h1 class="hero-title">
+          Every Journey,<br>
+          <span class="hero-title-italic">Sculpted & Accounted.</span>
+        </h1>
+
+        <p class="hero-description">
+          A digital sanctuary for the discerning explorer. Keep your ambitions vast, your budget in perfect harmony, and the poetry of adventure immortalized.
+        </p>
+
+        <div class="hero-cta-group">
+          <button id="hero-add-expense-btn" class="btn-amber-glow" aria-label="Record an expense">
+            <span>+ Record Expense</span>
+            <span class="btn-arrow">↗</span>
+          </button>
+          <button id="hero-new-trip-btn" class="btn-mocha-pill" aria-label="Plan a new expedition">
+            <span>Plan Expedition</span>
+          </button>
+        </div>
+
+        <div class="hero-meta-strip">
+          <div class="meta-item">
+            <span class="meta-label">CURRENT HORIZON</span>
+            <span class="meta-val" id="hero-horizon">-</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">PORTFOLIO STATUS</span>
+            <span class="meta-val" id="hero-status">Awaiting Data</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">LEDGER CURRENCY</span>
+            <span class="meta-val" id="hero-currency">USD</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column: Interactive 3D Canvas Centerpiece -->
+      <div class="hero-3d-wrapper">
+        <div class="hero-3d-frame">
+          <canvas id="origami-canvas" aria-label="Interactive 3D Origami Celestial Sphere"></canvas>
+          <div class="hero-3d-caption">
+            <span class="caption-tag">ART PIECE 01</span>
+            <p class="caption-name">The Origami Celestial Astrolabe</p>
+            <span class="caption-interaction">✦ DRAG TO EXPLORE ORIENTATION</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Application Workspace -->
+  <main class="main-workspace">
+    <!-- Trip Management Control Bar -->
+    <section class="control-bar-card">
+      <div class="control-bar-left">
+        <div class="field-group">
+          <label for="trip" class="field-label">ACTIVE EXPEDITION</label>
+          <div class="select-wrapper">
+            <select id="trip" aria-label="Select an active expedition"></select>
+            <span class="select-arrow">▾</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="control-bar-right">
+        <button class="btn-text-luxury" id="edit-trip" title="Modify expedition parameters">
+          <span>✎</span> Edit Expedition
+        </button>
+        <button class="btn-text-danger" id="delete-trip" title="Permanently delete current expedition">
+          <span>✕</span> Delete
+        </button>
+      </div>
     </section>
 
-    <section class="workspace">
-      <div class="trip-picker">
-        <label for="trip">CURRENT TRIP</label>
-        <select id="trip" aria-label="Select trip"></select>
-        <div class="trip-actions">
-          <button class="text-button" id="edit-trip" title="Edit trip details">✎ Edit trip</button>
-          <button class="text-button danger" id="delete-trip" title="Delete trip">✕ Delete trip</button>
-        </div>
-      </div>
+    <!-- Empty State (When no trips exist) -->
+    <section id="empty" class="empty-state-exhibition" hidden>
+      <div class="empty-sculpture">✦</div>
+      <div class="empty-eyebrow">THE HORIZON AWAITS</div>
+      <h2 class="empty-title">Where will your thoughts roam next?</h2>
+      <p class="empty-description">
+        Initiate your first expedition archive to set your budget, choose your local currency, and catalog the journey.
+      </p>
+      <button id="first-trip" class="btn-amber-glow">
+        <span>Curate First Expedition</span>
+        <span class="btn-arrow">↗</span>
+      </button>
+    </section>
 
-      <!-- Empty State -->
-      <div id="empty" class="empty">
-        <div class="empty-icon">✧</div>
-        <h2>Where are you headed?</h2>
-        <p>Create your first trip to set a budget and begin tracking expenses with ease.</p>
-        <button id="first-trip" class="primary-btn">Plan my first trip ↗</button>
-      </div>
-
-      <!-- Dashboard -->
-      <div id="dashboard" hidden>
-        <!-- Budget Health Meter -->
-        <div class="budget-meter-card">
-          <div class="budget-meter-header">
-            <span>BUDGET UTILIZATION</span>
-            <span id="meter-percent" class="meter-badge">0% used</span>
+    <!-- Active Expedition Dashboard Workspace -->
+    <div id="dashboard" class="dashboard-layout">
+      <!-- Cinematic Budget Utilization Gauge -->
+      <section class="gauge-card">
+        <div class="gauge-top-row">
+          <div class="gauge-meta">
+            <span class="gauge-label">BUDGET HARMONY GAUGE</span>
+            <h3 class="gauge-status-heading" id="gauge-status-text">On Track</h3>
           </div>
-          <div class="meter-bar-track">
-            <div id="meter-bar-fill" class="meter-bar-fill"></div>
+          <div class="gauge-badge-wrapper">
+            <span id="meter-percent" class="meter-badge">0% Utilized</span>
           </div>
         </div>
 
-        <div class="stats">
-          <article>
-            <span class="stat-label">TRIP BUDGET</span>
-            <h2 id="budget">-</h2>
-            <small id="destination">-</small>
-          </article>
-          <article>
-            <span class="stat-label">TOTAL SPENT</span>
-            <h2 id="spent">-</h2>
-            <small id="expense-count">0 expenses recorded</small>
-          </article>
-          <article class="remaining" id="remaining-card">
-            <span class="stat-label" id="remaining-label">LEFT TO EXPLORE</span>
-            <h2 id="remaining">-</h2>
-            <small id="budget-note">-</small>
-          </article>
+        <div class="gauge-track-container">
+          <div class="gauge-track">
+            <div id="meter-bar-fill" class="gauge-fill" style="width: 0%;">
+              <span class="gauge-glow-head"></span>
+            </div>
+          </div>
         </div>
 
-        <div class="columns">
-          <!-- Ledger Panel -->
-          <section class="panel ledger">
-            <div class="panel-heading">
-              <div>
-                <h2>Your expenses</h2>
-                <p>The small details behind the big adventure.</p>
-              </div>
-              <button id="add-expense" class="primary-btn">+ Add expense</button>
+        <div class="gauge-sub-info">
+          <span id="gauge-detail-left">Calculated from total recorded expenses</span>
+          <span id="gauge-detail-right">Refreshed in real time</span>
+        </div>
+      </section>
+
+      <!-- KPI Analytics Trio -->
+      <section class="kpi-grid">
+        <article class="kpi-card" data-tilt>
+          <div class="kpi-inner">
+            <div class="kpi-header">
+              <span class="kpi-label">TOTAL ALLOCATED BUDGET</span>
+              <span class="kpi-icon">◈</span>
+            </div>
+            <div class="kpi-value-row">
+              <h2 id="budget" class="kpi-val">-</h2>
+            </div>
+            <div class="kpi-footer">
+              <span class="kpi-pill destination-pill" id="destination">-</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="kpi-card" data-tilt>
+          <div class="kpi-inner">
+            <div class="kpi-header">
+              <span class="kpi-label">TOTAL EXPENDITURE</span>
+              <span class="kpi-icon">✦</span>
+            </div>
+            <div class="kpi-value-row">
+              <h2 id="spent" class="kpi-val">-</h2>
+            </div>
+            <div class="kpi-footer">
+              <span class="kpi-pill count-pill" id="expense-count">0 items cataloged</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="kpi-card kpi-highlight" id="remaining-card" data-tilt>
+          <div class="kpi-inner">
+            <div class="kpi-header">
+              <span class="kpi-label" id="remaining-label">PRESERVED DISCOVERY CAPITAL</span>
+              <span class="kpi-icon">✳</span>
+            </div>
+            <div class="kpi-value-row">
+              <h2 id="remaining" class="kpi-val">-</h2>
+            </div>
+            <div class="kpi-footer">
+              <span class="kpi-sub-note" id="budget-note">-</span>
+            </div>
+          </div>
+        </article>
+      </section>
+
+      <!-- Dual Split Workspace: Ledger + Category Breakdown -->
+      <div class="workspace-columns">
+        <!-- Left: Expenditure Ledger -->
+        <section class="luxury-panel ledger-panel">
+          <div class="panel-header">
+            <div>
+              <div class="panel-eyebrow">PORTFOLIO LOG</div>
+              <h2 class="panel-title">Expenditure Ledger</h2>
+              <p class="panel-subtitle">The discrete moments comprising your expedition.</p>
+            </div>
+            <button id="add-expense" class="btn-amber-glow btn-sm">
+              <span>+ Record Expense</span>
+            </button>
+          </div>
+
+          <!-- Filters & Action Bar -->
+          <div class="ledger-filter-strip">
+            <div class="search-input-box">
+              <span class="search-icon">🔍</span>
+              <input id="search" placeholder="Search by note or description…" aria-label="Search expenses">
             </div>
 
-            <div class="filters">
-              <div class="filter-controls">
-                <input id="search" placeholder="Search by note…" aria-label="Search expenses">
-                <select id="filter-category" aria-label="Filter by category">
-                  <option value="ALL">All Categories</option>
+            <div class="filter-dropdowns">
+              <div class="select-wrapper sm">
+                <select id="filter-category" aria-label="Filter expenses by category">
+                  <option value="ALL">All Portfolios</option>
                   <option value="Transport">Transport</option>
                   <option value="Stay">Stay</option>
                   <option value="Food">Food</option>
@@ -108,135 +256,211 @@
                   <option value="Shopping">Shopping</option>
                   <option value="Other">Other</option>
                 </select>
+                <span class="select-arrow">▾</span>
+              </div>
+
+              <div class="select-wrapper sm">
                 <select id="sort-by" aria-label="Sort expenses">
-                  <option value="date-desc">Date (Newest)</option>
-                  <option value="date-asc">Date (Oldest)</option>
+                  <option value="date-desc">Chronological (Newest)</option>
+                  <option value="date-asc">Chronological (Oldest)</option>
                   <option value="amount-desc">Amount (Highest)</option>
                   <option value="amount-asc">Amount (Lowest)</option>
                 </select>
+                <span class="select-arrow">▾</span>
               </div>
-              <button class="text-button" id="export">↓ Export CSV</button>
             </div>
 
-            <div class="table-scroll">
-              <table>
-                <thead>
-                  <tr>
-                    <th>EXPENSE</th>
-                    <th>CATEGORY</th>
-                    <th>DATE</th>
-                    <th>AMOUNT</th>
-                    <th class="actions-col">ACTIONS</th>
-                  </tr>
-                </thead>
-                <tbody id="expenses"></tbody>
-              </table>
-            </div>
-            <p id="no-expenses" class="muted">No expenses yet. Add your first travel expense.</p>
-          </section>
+            <button class="btn-csv-export" id="export" title="Export portfolio to sanitized CSV">
+              <span>↓</span> Export CSV
+            </button>
+          </div>
 
-          <!-- Breakdown Panel -->
-          <section class="panel breakdown">
-            <div class="eyebrow">THE BIG PICTURE</div>
-            <h2>Where it goes</h2>
-            <div id="categories"></div>
-            <div class="tip">
-              <strong>✦ Make room for memories.</strong>
-              <p>Keep track of the essentials, stay in harmony with your budget, and savor every horizon.</p>
+          <!-- Responsive Data Table -->
+          <div class="table-frame">
+            <table class="editorial-table">
+              <thead>
+                <tr>
+                  <th scope="col">ITEM / MEMORY</th>
+                  <th scope="col">CATEGORY</th>
+                  <th scope="col">DATE</th>
+                  <th scope="col" class="th-amount">AMOUNT</th>
+                  <th scope="col" class="th-actions">MANAGE</th>
+                </tr>
+              </thead>
+              <tbody id="expenses"></tbody>
+            </table>
+          </div>
+
+          <div id="no-expenses" class="empty-ledger-notice" hidden>
+            <span class="notice-sparkle">✧</span>
+            <p>No expenditures recorded under the active criteria.</p>
+          </div>
+        </section>
+
+        <!-- Right: Category Portfolio Allocation -->
+        <section class="luxury-panel breakdown-panel">
+          <div class="panel-header">
+            <div>
+              <div class="panel-eyebrow">BALANCE ARCHIVE</div>
+              <h2 class="panel-title">Capital Allocation</h2>
+              <p class="panel-subtitle">Proportional disbursement across categories.</p>
             </div>
-          </section>
-        </div>
+          </div>
+
+          <div id="categories" class="category-bars-list"></div>
+
+          <!-- Curated Editorial Wisdom Card -->
+          <div class="editorial-wisdom-card">
+            <div class="wisdom-icon">✳</div>
+            <div class="wisdom-content">
+              <h4>Mindful Exploration</h4>
+              <p>“Travel is not an escape from life, but rather so that life does not escape us. Keep the details accounted for, then immerse yourself in the present moment.”</p>
+            </div>
+          </div>
+        </section>
       </div>
-    </section>
-
-    <footer>
-      MADE FOR THE JOURNEY <span>✳</span> ONE TRIP AT A TIME
-    </footer>
+    </div>
   </main>
 
-  <!-- Trip Dialog -->
-  <dialog id="trip-dialog">
-    <form id="trip-form">
+  <!-- Editorial Colophon & Footer -->
+  <footer class="cinematic-footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <span class="footer-mark">✳</span> ROAM HAUTE HORIZONS
+      </div>
+      <div class="footer-tagline">
+        CRAFTED FOR DISCERNING TRAVELERS · SERENITY IN EVERY NUMBER
+      </div>
+      <div class="footer-version">
+        VAULT VERSION 2.4 · POWERED BY EMBEDDED SQLITE
+      </div>
+    </div>
+  </footer>
+
+  <!-- Modal Dialog: Curate / Edit Expedition -->
+  <dialog id="trip-dialog" class="luxury-modal">
+    <form id="trip-form" class="modal-form">
       <input type="hidden" name="trip_id" id="trip-form-id" value="">
-      <div class="dialog-heading">
-        <h2 id="trip-dialog-title">Plan a new trip</h2>
-        <button type="button" class="close" aria-label="Close">×</button>
+      
+      <div class="modal-header">
+        <div>
+          <span class="modal-eyebrow">EXPEDITION ARCHIVE</span>
+          <h2 id="trip-dialog-title" class="modal-title">Curate New Expedition</h2>
+        </div>
+        <button type="button" class="modal-close" aria-label="Close dialog">✕</button>
       </div>
-      <label>
-        Trip name
-        <input name="name" id="trip-name" placeholder="Summer in Lisbon" maxlength="120" required>
-      </label>
-      <label>
-        Destination
-        <input name="destination" id="trip-dest" placeholder="Lisbon, Portugal" maxlength="120" required>
-      </label>
-      <div class="form-row">
-        <label>
-          Budget
-          <input name="budget" id="trip-budget" type="number" min="0.01" step="0.01" placeholder="2500" required>
-        </label>
-        <label>
-          Currency
-          <select name="currency" id="trip-currency">
-            <option value="INR">INR (₹)</option>
-            <option value="USD">USD ($)</option>
-            <option value="EUR">EUR (€)</option>
-            <option value="GBP">GBP (£)</option>
-            <option value="JPY">JPY (¥)</option>
-            <option value="AUD">AUD (A$)</option>
-            <option value="CAD">CAD (C$)</option>
-            <option value="CHF">CHF (CHF)</option>
-            <option value="SGD">SGD (S$)</option>
-            <option value="AED">AED (AED)</option>
-            <option value="THB">THB (฿)</option>
-            <option value="NZD">NZD (NZ$)</option>
-          </select>
-        </label>
+
+      <div class="form-body">
+        <div class="form-field">
+          <label for="trip-name">Expedition Title</label>
+          <input name="name" id="trip-name" placeholder="Autumn in Kyoto & Nara" maxlength="120" required autocomplete="off">
+        </div>
+
+        <div class="form-field">
+          <label for="trip-dest">Destination Region</label>
+          <input name="destination" id="trip-dest" placeholder="Kyoto, Japan" maxlength="120" required autocomplete="off">
+        </div>
+
+        <div class="form-row-dual">
+          <div class="form-field">
+            <label for="trip-budget">Financial Allocation</label>
+            <input name="budget" id="trip-budget" type="number" min="0.01" step="0.01" placeholder="4500.00" required>
+          </div>
+
+          <div class="form-field">
+            <label for="trip-currency">Currency Code</label>
+            <div class="select-wrapper modal-select">
+              <select name="currency" id="trip-currency">
+                <option value="USD">USD ($) · United States Dollar</option>
+                <option value="EUR">EUR (€) · Euro</option>
+                <option value="GBP">GBP (£) · British Pound</option>
+                <option value="JPY">JPY (¥) · Japanese Yen</option>
+                <option value="INR">INR (₹) · Indian Rupee</option>
+                <option value="AUD">AUD (A$) · Australian Dollar</option>
+                <option value="CAD">CAD (C$) · Canadian Dollar</option>
+                <option value="CHF">CHF (Fr) · Swiss Franc</option>
+                <option value="SGD">SGD (S$) · Singapore Dollar</option>
+                <option value="AED">AED (AED) · UAE Dirham</option>
+                <option value="THB">THB (฿) · Thai Baht</option>
+                <option value="NZD">NZD (NZ$) · New Zealand Dollar</option>
+              </select>
+              <span class="select-arrow">▾</span>
+            </div>
+          </div>
+        </div>
       </div>
-      <button type="submit" id="trip-submit-btn" class="primary-btn dialog-submit">Create trip ↗</button>
+
+      <div class="modal-footer">
+        <button type="button" class="btn-text-luxury cancel-btn">Dismiss</button>
+        <button type="submit" id="trip-submit-btn" class="btn-amber-glow">
+          <span>Preserve Expedition</span>
+          <span class="btn-arrow">↗</span>
+        </button>
+      </div>
     </form>
   </dialog>
 
-  <!-- Expense Dialog -->
-  <dialog id="expense-dialog">
-    <form id="expense-form">
+  <!-- Modal Dialog: Record / Edit Expense -->
+  <dialog id="expense-dialog" class="luxury-modal">
+    <form id="expense-form" class="modal-form">
       <input type="hidden" name="expense_id" id="expense-form-id" value="">
-      <div class="dialog-heading">
-        <h2 id="expense-dialog-title">Add an expense</h2>
-        <button type="button" class="close" aria-label="Close">×</button>
+      
+      <div class="modal-header">
+        <div>
+          <span class="modal-eyebrow">EXPENDITURE RECORD</span>
+          <h2 id="expense-dialog-title" class="modal-title">Record an Expenditure</h2>
+        </div>
+        <button type="button" class="modal-close" aria-label="Close dialog">✕</button>
       </div>
-      <label>
-        Description
-        <input name="description" id="expense-desc" placeholder="Sunset dinner by the bay" maxlength="200" required>
-      </label>
-      <div class="form-row">
-        <label>
-          Amount
-          <input name="amount" id="expense-amount" type="number" min="0.01" step="0.01" placeholder="45.00" required>
-        </label>
-        <label>
-          Category
-          <select name="category" id="expense-cat">
-            <option value="Transport">Transport</option>
-            <option value="Stay">Stay</option>
-            <option value="Food">Food</option>
-            <option value="Activities">Activities</option>
-            <option value="Shopping">Shopping</option>
-            <option value="Other">Other</option>
-          </select>
-        </label>
+
+      <div class="form-body">
+        <div class="form-field">
+          <label for="expense-desc">Description / Memory</label>
+          <input name="description" id="expense-desc" placeholder="Omakase tasting dinner at Gion" maxlength="200" required autocomplete="off">
+        </div>
+
+        <div class="form-row-dual">
+          <div class="form-field">
+            <label for="expense-amount">Amount</label>
+            <input name="amount" id="expense-amount" type="number" min="0.01" step="0.01" placeholder="185.00" required>
+          </div>
+
+          <div class="form-field">
+            <label for="expense-cat">Allocation Portfolio</label>
+            <div class="select-wrapper modal-select">
+              <select name="category" id="expense-cat">
+                <option value="Transport">Transport</option>
+                <option value="Stay">Stay</option>
+                <option value="Food">Food</option>
+                <option value="Activities">Activities</option>
+                <option value="Shopping">Shopping</option>
+                <option value="Other">Other</option>
+              </select>
+              <span class="select-arrow">▾</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-field">
+          <label for="expense-date">Date of Disbursement</label>
+          <input name="date" id="expense-date" type="date" required>
+        </div>
       </div>
-      <label>
-        Date
-        <input name="date" id="expense-date" type="date" required>
-      </label>
-      <button type="submit" id="expense-submit-btn" class="primary-btn dialog-submit">Save expense ↗</button>
+
+      <div class="modal-footer">
+        <button type="button" class="btn-text-luxury cancel-btn">Dismiss</button>
+        <button type="submit" id="expense-submit-btn" class="btn-amber-glow">
+          <span>Log Disbursement</span>
+          <span class="btn-arrow">↗</span>
+        </button>
+      </div>
     </form>
   </dialog>
 
-  <!-- Toast Notification -->
+  <!-- High-End Amber Toast Notification -->
   <div id="toast" role="status" aria-live="polite" hidden></div>
 
+  <!-- Primary Application Script with 3D Centerpiece Engine -->
   <script src="app.js"></script>
 </body>
 </html>
