@@ -4,20 +4,23 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Roam · Haute Travel Archive & Financial Ledger</title>
-  <meta name="description" content="A cinematic, luxury travel expense tracker and budget archive.">
+  <meta name="description" content="An ultra-realistic cinematic travel expense tracker and luxury budget archive.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
-  <!-- Three.js for 3D Origami Celestial Centerpiece -->
+  <!-- Three.js for Physically Based 3D Celestial Centerpiece -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 </head>
 <body>
-  <!-- Ambient Cinematic Grain & Warm Lighting Orbs -->
-  <div class="ambient-glow orb-1"></div>
-  <div class="ambient-glow orb-2"></div>
-  <div class="ambient-glow orb-3"></div>
-  <div class="grain-overlay" aria-hidden="true"></div>
+  <!-- Cinematic Golden-Hour Architectural Lighting Rig -->
+  <div class="sunlight-key-source" aria-hidden="true"></div>
+  <div class="sunlight-beam beam-primary" aria-hidden="true"></div>
+  <div class="sunlight-beam beam-secondary" aria-hidden="true"></div>
+  <div class="sculpture-ambient-pool" aria-hidden="true"></div>
+  <div class="soft-bounce-pool" aria-hidden="true"></div>
+  <div class="cinematic-vignette" aria-hidden="true"></div>
+  <div class="film-grain-layer" aria-hidden="true"></div>
 
   <!-- Luxury Editorial Header Navigation -->
   <nav class="cinematic-nav">
@@ -30,9 +33,9 @@
       </a>
 
       <div class="nav-center">
-        <div class="nav-trip-pill" id="nav-trip-indicator" title="Current Expedition">
+        <div class="nav-trip-pill" id="nav-trip-indicator" title="Current Active Expedition">
           <span class="pill-dot">✦</span>
-          <span id="nav-current-trip-name">Select Trip</span>
+          <span id="nav-current-trip-name">Select Expedition</span>
           <span id="nav-current-destination" class="pill-dest"></span>
         </div>
       </div>
@@ -42,14 +45,14 @@
           <span class="status-indicator"></span>
           <span class="status-text">LOCAL VAULT ACTIVE</span>
         </span>
-        <button id="nav-new-trip" class="btn-gold-outline" aria-label="Create New Expedition">
+        <button id="nav-new-trip" class="btn-gold-outline" aria-label="Curate New Expedition">
           + New Expedition
         </button>
       </div>
     </div>
   </nav>
 
-  <!-- Hero Exhibition Section with 3D Origami Centerpiece -->
+  <!-- Hero Exhibition Section with 3D Centerpiece -->
   <header class="hero-section">
     <div class="hero-grid">
       <!-- Left Editorial Column -->
@@ -95,14 +98,14 @@
         </div>
       </div>
 
-      <!-- Right Column: Interactive 3D Canvas Centerpiece -->
+      <!-- Right Column: Photorealistic 3D Celestial Astrolabe -->
       <div class="hero-3d-wrapper">
         <div class="hero-3d-frame">
-          <canvas id="origami-canvas" aria-label="Interactive 3D Origami Celestial Sphere"></canvas>
+          <canvas id="origami-canvas" aria-label="Photorealistic 3D Celestial Astrolabe"></canvas>
           <div class="hero-3d-caption">
-            <span class="caption-tag">ART PIECE 01</span>
+            <span class="caption-tag">EXHIBIT 01</span>
             <p class="caption-name">The Origami Celestial Astrolabe</p>
-            <span class="caption-interaction">✦ DRAG TO EXPLORE ORIENTATION</span>
+            <span class="caption-interaction">✦ INTERACTIVE ROTATION · THREE-POINT STUDIO LIGHTING</span>
           </div>
         </div>
       </div>
@@ -154,7 +157,7 @@
         <div class="gauge-top-row">
           <div class="gauge-meta">
             <span class="gauge-label">BUDGET HARMONY GAUGE</span>
-            <h3 class="gauge-status-heading" id="gauge-status-text">On Track</h3>
+            <h3 class="gauge-status-heading" id="gauge-status-text">Harmonious Cadence</h3>
           </div>
           <div class="gauge-badge-wrapper">
             <span id="meter-percent" class="meter-badge">0% Utilized</span>
@@ -332,7 +335,7 @@
         CRAFTED FOR DISCERNING TRAVELERS · SERENITY IN EVERY NUMBER
       </div>
       <div class="footer-version">
-        VAULT VERSION 2.4 · POWERED BY EMBEDDED SQLITE
+        VAULT VERSION 2.5 · POWERED BY EMBEDDED SQLITE
       </div>
     </div>
   </footer>
@@ -460,7 +463,7 @@
   <!-- High-End Amber Toast Notification -->
   <div id="toast" role="status" aria-live="polite" hidden></div>
 
-  <!-- Primary Application Script with 3D Centerpiece Engine -->
+  <!-- Primary Application Script with Photorealistic 3D Engine -->
   <script src="app.js"></script>
 </body>
 </html>

@@ -1,7 +1,7 @@
 /**
  * ROAM — Haute Travel Archive & Financial Ledger
- * Creative Direction: Awwwards-Grade Luxury Editorial & 3D WebGL Interaction
- * Centerpiece: The Origami Celestial Astrolabe (Three.js WebGL)
+ * Ultra-Realistic Cinematic UI/UX Upgrade
+ * Physical Materials, Studio Lighting & Three.js ACESFilmic PBR Engine
  */
 
 (() => {
@@ -38,7 +38,7 @@
   // Get current active trip object
   const currentTrip = () => trips.find((t) => t.id === selectedTripId) || null;
 
-  // Currency formatting with Intl API
+  // Currency formatting with native Intl API
   const money = (amount, currencyCode) => {
     const curr = currencyCode || currentTrip()?.currency || 'USD';
     const isZeroDecimal = curr === 'JPY';
@@ -304,7 +304,7 @@
     }
   }
 
-  // Modal Dialog Opening Handlers
+  // Modal Dialog Handlers
   function openTripModal(tripToEdit = null) {
     editingTripId = tripToEdit ? tripToEdit.id : null;
     const dialogTitle = $('trip-dialog-title');
@@ -565,37 +565,37 @@
     };
   }
 
-  // Interactive 3D Card Tilt for KPI Cards
+  // Subtle Interactive 3D Card Tilt for KPI Cards
   document.querySelectorAll('.kpi-card[data-tilt]').forEach((card) => {
     card.addEventListener('mousemove', (e) => {
       const rect = card.getBoundingClientRect();
       const x = e.clientX - rect.left - rect.width / 2;
       const y = e.clientY - rect.top - rect.height / 2;
-      const tiltX = (y / (rect.height / 2)) * -6;
-      const tiltY = (x / (rect.width / 2)) * 6;
-      card.style.transform = `perspective(800px) rotateX(${tiltX}deg) rotateY(${tiltY}deg) translateY(-4px)`;
+      const tiltX = (y / (rect.height / 2)) * -4.5;
+      const tiltY = (x / (rect.width / 2)) * 4.5;
+      card.style.transform = `perspective(900px) rotateX(${tiltX}deg) rotateY(${tiltY}deg) translateY(-4px)`;
     });
 
     card.addEventListener('mouseleave', () => {
-      card.style.transform = 'perspective(800px) rotateX(0deg) rotateY(0deg) translateY(0)';
+      card.style.transform = 'perspective(900px) rotateX(0deg) rotateY(0deg) translateY(0)';
     });
   });
 
   // =========================================================================
-  // 3D ORIGAMI CELESTIAL ASTROLABE (Three.js WebGL Engine)
-  // Inspired by folded paper sculpture, golden metallic facets & warm rim lighting
+  // ULTRA-REALISTIC 3D CELESTIAL ASTROLABE (Three.js ACESFilmic PBR Engine)
+  // Physically Based MeshPhysicalMaterial, Studio Lighting & Micro-Imperfections
   // =========================================================================
   function init3DCenterpiece() {
     const canvas = $('origami-canvas');
     if (!canvas || typeof THREE === 'undefined') return;
 
     const container = canvas.parentElement;
-    let width = container.clientWidth || 480;
-    let height = container.clientHeight || 460;
+    let width = container.clientWidth || 500;
+    let height = container.clientHeight || 480;
 
     const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 100);
-    camera.position.set(0, 0, 7.5);
+    const camera = new THREE.PerspectiveCamera(42, width / height, 0.1, 100);
+    camera.position.set(0, 0, 8.2);
 
     const renderer = new THREE.WebGLRenderer({
       canvas,
@@ -606,61 +606,141 @@
     renderer.setSize(width, height);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
-    // Master Group for All 3D Sculpture Elements
+    // ACESFilmic Tone Mapping & High-Fidelity Color Space
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.15;
+    if (THREE.sRGBEncoding) {
+      renderer.outputEncoding = THREE.sRGBEncoding;
+    }
+
+    // Procedural Studio Environment Reflection Map Generator
+    // Gives metals real, dynamic architectural reflections without external HDRI assets
+    try {
+      const pmremGenerator = new THREE.PMREMGenerator(renderer);
+      pmremGenerator.compileEquirectangularShader();
+
+      const envScene = new THREE.Scene();
+      const envCanvas = document.createElement('canvas');
+      envCanvas.width = 512;
+      envCanvas.height = 256;
+      const ctx = envCanvas.getContext('2d');
+
+      // Gradient representing warm architectural golden hour interior
+      const grad = ctx.createLinearGradient(0, 0, 512, 256);
+      grad.addColorStop(0, '#100C09');
+      grad.addColorStop(0.3, '#39271C');
+      grad.addColorStop(0.65, '#E9C78D');
+      grad.addColorStop(0.85, '#FFCC82');
+      grad.addColorStop(1, '#1A120C');
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, 512, 256);
+
+      // Light portal highlight
+      const radial = ctx.createRadialGradient(420, 50, 10, 420, 50, 140);
+      radial.addColorStop(0, '#FFF6E8');
+      radial.addColorStop(0.4, '#FFDCA0');
+      radial.addColorStop(1, 'transparent');
+      ctx.fillStyle = radial;
+      ctx.fillRect(0, 0, 512, 256);
+
+      const envTexture = new THREE.CanvasTexture(envCanvas);
+      envTexture.mapping = THREE.EquirectangularReflectionMapping;
+      const envMap = pmremGenerator.fromEquirectangular(envTexture);
+      scene.environment = envMap.texture;
+      envTexture.dispose();
+      pmremGenerator.dispose();
+    } catch {
+      // Fallback gracefully if PMREM is unsupported
+    }
+
+    // Master Group for 3D Sculpture Hierarchy
     const masterGroup = new THREE.Group();
     scene.add(masterGroup);
 
-    // 1. Folded Origami Polyhedral Core
-    // Icosahedron with flat shading creates realistic triangular paper folds
-    const origamiGeo = new THREE.IcosahedronGeometry(2.1, 1);
-    const origamiMat = new THREE.MeshStandardMaterial({
-      color: 0xF4D9A0,       // Champagne Gold
-      roughness: 0.38,
-      metalness: 0.55,
+    // 1. PRIMARY SCULPTURAL CORE: Multi-Faceted Origami Body
+    // Using MeshPhysicalMaterial for photorealistic metallic bronze & champagne luster
+    const coreGeo = new THREE.IcosahedronGeometry(2.0, 1);
+    const coreMat = new THREE.MeshPhysicalMaterial({
+      color: 0xE9C78D,             // Champagne Gold
+      metalness: 0.86,
+      roughness: 0.26,
+      clearcoat: 0.4,
+      clearcoatRoughness: 0.12,
+      reflectivity: 0.85,
       flatShading: true,
+      envMapIntensity: 1.4,
     });
-    const origamiMesh = new THREE.Mesh(origamiGeo, origamiMat);
-    masterGroup.add(origamiMesh);
+    const coreMesh = new THREE.Mesh(coreGeo, coreMat);
+    masterGroup.add(coreMesh);
 
-    // 2. Inner Glowing Core
-    const innerGeo = new THREE.IcosahedronGeometry(1.6, 0);
-    const innerMat = new THREE.MeshBasicMaterial({
-      color: 0xC8792C,       // Burnt Amber
+    // 2. INNER WARM-BRONZE GEOMETRIC SKELETON
+    const innerGeo = new THREE.IcosahedronGeometry(1.5, 0);
+    const innerMat = new THREE.MeshStandardMaterial({
+      color: 0x93613B,             // Warm Bronze
+      metalness: 0.9,
+      roughness: 0.35,
       wireframe: true,
-      transparent: true,
-      opacity: 0.35,
     });
     const innerMesh = new THREE.Mesh(innerGeo, innerMat);
     masterGroup.add(innerMesh);
 
-    // 3. Delicate Orbital Rings (Celestial Navigation Latitudes)
-    const ringMat1 = new THREE.MeshStandardMaterial({
-      color: 0xC8792C,
-      metalness: 0.8,
-      roughness: 0.25,
+    // 3. PRECISION GIMBAL / CELESTIAL ASTROLABE RINGS
+    // High-metalness burnished copper and champagne rings with realistic chamfers
+    const ringMat1 = new THREE.MeshPhysicalMaterial({
+      color: 0xB86A2D,             // Burnished Copper
+      metalness: 0.88,
+      roughness: 0.22,
+      clearcoat: 0.45,
+      clearcoatRoughness: 0.08,
+      envMapIntensity: 1.6,
     });
-    const ringGeo1 = new THREE.TorusGeometry(3.1, 0.022, 16, 120);
+    const ringGeo1 = new THREE.TorusGeometry(3.05, 0.024, 20, 120);
     const ringMesh1 = new THREE.Mesh(ringGeo1, ringMat1);
     ringMesh1.rotation.x = Math.PI / 3;
     masterGroup.add(ringMesh1);
 
-    const ringMat2 = new THREE.MeshStandardMaterial({
-      color: 0xF4D9A0,
-      metalness: 0.7,
-      roughness: 0.3,
+    const ringMat2 = new THREE.MeshPhysicalMaterial({
+      color: 0xE9C78D,             // Champagne Gold
+      metalness: 0.85,
+      roughness: 0.25,
+      clearcoat: 0.4,
+      envMapIntensity: 1.5,
     });
-    const ringGeo2 = new THREE.TorusGeometry(3.4, 0.016, 16, 120);
+    const ringGeo2 = new THREE.TorusGeometry(3.35, 0.018, 20, 120);
     const ringMesh2 = new THREE.Mesh(ringGeo2, ringMat2);
     ringMesh2.rotation.y = Math.PI / 4;
-    ringMesh2.rotation.x = -Math.PI / 6;
+    ringMesh2.rotation.x = -Math.PI / 5;
     masterGroup.add(ringMesh2);
 
-    // 4. Stardust / Constellation Dust Particles
-    const particleCount = 140;
+    const ringGeo3 = new THREE.TorusGeometry(3.6, 0.014, 16, 120);
+    const ringMesh3 = new THREE.Mesh(ringGeo3, ringMat1);
+    ringMesh3.rotation.z = Math.PI / 6;
+    ringMesh3.rotation.y = -Math.PI / 3;
+    masterGroup.add(ringMesh3);
+
+    // 4. CELESTIAL POLAR NODES & PIVOT STUDS
+    const pivotMat = new THREE.MeshStandardMaterial({
+      color: 0xFFDCA0,
+      metalness: 0.95,
+      roughness: 0.15,
+    });
+    const pivotGeo = new THREE.SphereGeometry(0.065, 16, 16);
+    
+    [
+      [0, 3.05, 0], [0, -3.05, 0],
+      [3.35, 0, 0], [-3.35, 0, 0]
+    ].forEach(([x, y, z]) => {
+      const pMesh = new THREE.Mesh(pivotGeo, pivotMat);
+      pMesh.position.set(x, y, z);
+      masterGroup.add(pMesh);
+    });
+
+    // 5. LUMINOUS SUSPENDED DUST SPECKS
+    const particleCount = 110;
     const particleGeo = new THREE.BufferGeometry();
     const particlePos = new Float32Array(particleCount * 3);
     for (let i = 0; i < particleCount * 3; i += 3) {
-      const radius = 3.2 + Math.random() * 2.2;
+      const radius = 3.2 + Math.random() * 2.1;
       const theta = Math.random() * Math.PI * 2;
       const phi = Math.acos(2 * Math.random() - 1);
       particlePos[i] = radius * Math.sin(phi) * Math.cos(theta);
@@ -669,35 +749,40 @@
     }
     particleGeo.setAttribute('position', new THREE.BufferAttribute(particlePos, 3));
     const particleMat = new THREE.PointsMaterial({
-      color: 0xF4D9A0,
-      size: 0.05,
+      color: 0xFFDCA0,
+      size: 0.045,
       transparent: true,
-      opacity: 0.7,
+      opacity: 0.65,
     });
     const particleSystem = new THREE.Points(particleGeo, particleMat);
     masterGroup.add(particleSystem);
 
-    // 5. Cinematic Lighting Rig
-    // Ambient Mocha Fill
-    const ambientLight = new THREE.AmbientLight(0x4A3525, 1.4);
+    // 6. CINEMATIC THREE-POINT STUDIO LIGHTING RIG
+    // Ambient Cool-Tint Shadow Fill
+    const ambientLight = new THREE.AmbientLight(0x28232A, 0.7);
     scene.add(ambientLight);
 
-    // Key Champagne Golden Light (Upper Left)
-    const keyLight = new THREE.DirectionalLight(0xFFF3D6, 2.4);
-    keyLight.position.set(5, 7, 6);
+    // Warm Key Light (Above & Right, Soft Golden Sunlight)
+    const keyLight = new THREE.DirectionalLight(0xFFCC82, 3.4);
+    keyLight.position.set(5.5, 7.0, 5.0);
     scene.add(keyLight);
 
-    // Dramatic Burnt Amber Rim Light (Lower Right / Rear)
-    const rimLight = new THREE.DirectionalLight(0xC8792C, 3.8);
-    rimLight.position.set(-6, -5, -4);
+    // Soft Bronze Bounce Light (From Left)
+    const bounceLight = new THREE.DirectionalLight(0xD8A777, 1.25);
+    bounceLight.position.set(-5.0, 1.5, 3.0);
+    scene.add(bounceLight);
+
+    // Controlled Amber Rim Light (Behind & Lower-Right)
+    const rimLight = new THREE.DirectionalLight(0xFF9C42, 4.2);
+    rimLight.position.set(-3.5, -4.0, -5.5);
     scene.add(rimLight);
 
-    // Interactive Mouse Drag & Parallax Handling
+    // Interactive Pointer Drag & Parallax Easing
     let isDragging = false;
     let prevMouseX = 0;
     let prevMouseY = 0;
-    let targetRotationX = 0.2;
-    let targetRotationY = 0.3;
+    let targetRotationX = 0.22;
+    let targetRotationY = 0.35;
 
     canvas.addEventListener('mousedown', (e) => {
       isDragging = true;
@@ -713,8 +798,8 @@
       if (isDragging) {
         const deltaX = e.clientX - prevMouseX;
         const deltaY = e.clientY - prevMouseY;
-        targetRotationY += deltaX * 0.007;
-        targetRotationX += deltaY * 0.007;
+        targetRotationY += deltaX * 0.006;
+        targetRotationX += deltaY * 0.006;
         prevMouseX = e.clientX;
         prevMouseY = e.clientY;
       }
@@ -737,8 +822,8 @@
       if (isDragging && e.touches.length === 1) {
         const deltaX = e.touches[0].clientX - prevMouseX;
         const deltaY = e.touches[0].clientY - prevMouseY;
-        targetRotationY += deltaX * 0.007;
-        targetRotationX += deltaY * 0.007;
+        targetRotationY += deltaX * 0.006;
+        targetRotationX += deltaY * 0.006;
         prevMouseX = e.touches[0].clientX;
         prevMouseY = e.touches[0].clientY;
       }
@@ -746,39 +831,40 @@
 
     // Responsive Canvas Resize Observer
     const resizeObserver = new ResizeObserver(() => {
-      width = container.clientWidth || 480;
-      height = container.clientHeight || 460;
+      width = container.clientWidth || 500;
+      height = container.clientHeight || 480;
       camera.aspect = width / height;
       camera.updateProjectionMatrix();
       renderer.setSize(width, height);
     });
     resizeObserver.observe(container);
 
-    // Animation Loop with Smooth Damped Float
+    // Cinematic Animation Loop with Physics Easing
     let clock = new THREE.Clock();
     function animate() {
       requestAnimationFrame(animate);
       const elapsedTime = clock.getElapsedTime();
 
-      // Slow ambient celestial rotation
+      // Very slow majestic natural drift
       if (!isDragging) {
-        targetRotationY += 0.0025;
-        targetRotationX = 0.2 + Math.sin(elapsedTime * 0.6) * 0.08;
+        targetRotationY += 0.0022;
+        targetRotationX = 0.22 + Math.sin(elapsedTime * 0.5) * 0.06;
       }
 
       // Smooth Lerp Damping
       masterGroup.rotation.y += (targetRotationY - masterGroup.rotation.y) * 0.05;
       masterGroup.rotation.x += (targetRotationX - masterGroup.rotation.x) * 0.05;
 
-      // Independent counter-rotation for orbital rings
-      ringMesh1.rotation.z = elapsedTime * 0.15;
-      ringMesh2.rotation.z = -elapsedTime * 0.12;
+      // Subtle differential ring rotation
+      ringMesh1.rotation.z = elapsedTime * 0.12;
+      ringMesh2.rotation.z = -elapsedTime * 0.09;
+      ringMesh3.rotation.x = elapsedTime * 0.07;
 
-      // Subtle breathing float on Y-axis
-      masterGroup.position.y = Math.sin(elapsedTime * 0.9) * 0.12;
+      // Organic vertical breathing motion
+      masterGroup.position.y = Math.sin(elapsedTime * 0.75) * 0.09;
 
-      // Slow particle field drift
-      particleSystem.rotation.y = elapsedTime * 0.02;
+      // Particle field drift
+      particleSystem.rotation.y = elapsedTime * 0.018;
 
       renderer.render(scene, camera);
     }
