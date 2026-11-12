@@ -1,0 +1,10 @@
+services:
+  app:
+    build: .
+    ports:
+      - "127.0.0.1:8080:8080"
+    volumes:
+      - travel-data:/data
+    restart: unless-stopped
+volumes:
+  travel-data:

@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Roam · Travel Expense Tracker</title>
+  <meta name="description" content="Minimalist, offline-first travel budget and expense tracker.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <aside>
+    <a class="brand" href="/">
+      <span class="brand-mark">✳</span> roam
+      <span class="brand-tagline">TRAVEL LIGHT. SPEND WISE.</span>
+    </a>
+    <div class="nav-label">YOUR WORKSPACE</div>
+    <div class="nav-active">◈ &nbsp; Trip overview</div>
+    <div class="aside-bottom">
+      A little planning.<br>A lot of possibility.
+      <span>Your next adventure starts here.</span>
+    </div>
+  </aside>
+
+  <main>
+    <header>
+      <div class="breadcrumb">WORKSPACE / <b>TRAVEL EXPENSES</b></div>
+      <span class="badge" id="sync-status">● &nbsp; Saved on your server</span>
+    </header>
+
+    <section class="heading">
+      <div>
+        <div class="eyebrow">LESS NUMBER CRUNCHING, MORE EXPLORING</div>
+        <h1>Every adventure,<br>accounted for.</h1>
+        <p>Keep your plans big and your spending in perspective.</p>
+      </div>
+      <button id="new-trip" class="primary-btn">+ New trip</button>
+    </section>
+
+    <section class="workspace">
+      <div class="trip-picker">
+        <label for="trip">CURRENT TRIP</label>
+        <select id="trip" aria-label="Select trip"></select>
+        <div class="trip-actions">
+          <button class="text-button" id="edit-trip" title="Edit trip details">✎ Edit trip</button>
+          <button class="text-button danger" id="delete-trip" title="Delete trip">✕ Delete trip</button>
+        </div>
+      </div>
+
+      <!-- Empty State -->
+      <div id="empty" class="empty">
+        <div class="empty-icon">✈</div>
+        <h2>Where are you headed?</h2>
+        <p>Create your first trip to set a budget and start tracking expenses on the go.</p>
+        <button id="first-trip" class="primary-btn">Plan my first trip ↗</button>
+      </div>
+
+      <!-- Dashboard -->
+      <div id="dashboard" hidden>
+        <!-- Budget Health Meter -->
+        <div class="budget-meter-card">
+          <div class="budget-meter-header">
+            <span>BUDGET UTILIZATION</span>
+            <span id="meter-percent" class="meter-badge">0% used</span>
+          </div>
+          <div class="meter-bar-track">
+            <div id="meter-bar-fill" class="meter-bar-fill"></div>
+          </div>
+        </div>
+
+        <div class="stats">
+          <article>
+            <span class="stat-label">TRIP BUDGET</span>
+            <h2 id="budget">-</h2>
+            <small id="destination">-</small>
+          </article>
+          <article>
+            <span class="stat-label">TOTAL SPENT</span>
+            <h2 id="spent">-</h2>
+            <small id="expense-count">0 expenses recorded</small>
+          </article>
+          <article class="remaining" id="remaining-card">
+            <span class="stat-label" id="remaining-label">LEFT TO EXPLORE</span>
+            <h2 id="remaining">-</h2>
+            <small id="budget-note">-</small>
+          </article>
+        </div>
+
+        <div class="columns">
+          <!-- Ledger Panel -->
+          <section class="panel ledger">
+            <div class="panel-heading">
+              <div>
+                <h2>Your expenses</h2>
+                <p>The small details behind the big adventure.</p>
+              </div>
+              <button id="add-expense" class="primary-btn">+ Add expense</button>
+            </div>
+
+            <div class="filters">
+              <div class="filter-controls">
+                <input id="search" placeholder="Search by note…" aria-label="Search expenses">
+                <select id="filter-category" aria-label="Filter by category">
+                  <option value="ALL">All Categories</option>
+                  <option value="Transport">Transport</option>
+                  <option value="Stay">Stay</option>
+                  <option value="Food">Food</option>
+                  <option value="Activities">Activities</option>
+                  <option value="Shopping">Shopping</option>
+                  <option value="Other">Other</option>
+                </select>
+                <select id="sort-by" aria-label="Sort expenses">
+                  <option value="date-desc">Date (Newest)</option>
+                  <option value="date-asc">Date (Oldest)</option>
+                  <option value="amount-desc">Amount (Highest)</option>
+                  <option value="amount-asc">Amount (Lowest)</option>
+                </select>
+              </div>
+              <button class="text-button" id="export">↓ Export CSV</button>
+            </div>
+
+            <div class="table-scroll">
+              <table>
+                <thead>
+                  <tr>
+                    <th>EXPENSE</th>
+                    <th>CATEGORY</th>
+                    <th>DATE</th>
+                    <th>AMOUNT</th>
+                    <th class="actions-col">ACTIONS</th>
+                  </tr>
+                </thead>
+                <tbody id="expenses"></tbody>
+              </table>
+            </div>
+            <p id="no-expenses" class="muted">No expenses yet. Add your first travel expense.</p>
+          </section>
+
+          <!-- Breakdown Panel -->
+          <section class="panel breakdown">
+            <div class="eyebrow">THE BIG PICTURE</div>
+            <h2>Where it goes</h2>
+            <div id="categories"></div>
+            <div class="tip">
+              <strong>↗ Make room for memories.</strong>
+              <p>Keep track of the essentials, stay mindful of your budget, and enjoy every moment.</p>
+            </div>
+          </section>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      MADE FOR THE JOURNEY <span>✳</span> ONE TRIP AT A TIME
+    </footer>
+  </main>
+
+  <!-- Trip Dialog -->
+  <dialog id="trip-dialog">
+    <form id="trip-form">
+      <input type="hidden" name="trip_id" id="trip-form-id" value="">
+      <div class="dialog-heading">
+        <h2 id="trip-dialog-title">Plan a new trip</h2>
+        <button type="button" class="close" aria-label="Close">×</button>
+      </div>
+      <label>
+        Trip name
+        <input name="name" id="trip-name" placeholder="Summer in Lisbon" maxlength="120" required>
+      </label>
+      <label>
+        Destination
+        <input name="destination" id="trip-dest" placeholder="Lisbon, Portugal" maxlength="120" required>
+      </label>
+      <div class="form-row">
+        <label>
+          Budget
+          <input name="budget" id="trip-budget" type="number" min="0.01" step="0.01" placeholder="2500" required>
+        </label>
+        <label>
+          Currency
+          <select name="currency" id="trip-currency">
+            <option value="INR">INR (₹)</option>
+            <option value="USD">USD ($)</option>
+            <option value="EUR">EUR (€)</option>
+            <option value="GBP">GBP (£)</option>
+            <option value="JPY">JPY (¥)</option>
+            <option value="AUD">AUD (A$)</option>
+            <option value="CAD">CAD (C$)</option>
+            <option value="CHF">CHF (CHF)</option>
+            <option value="SGD">SGD (S$)</option>
+            <option value="AED">AED (AED)</option>
+            <option value="THB">THB (฿)</option>
+            <option value="NZD">NZD (NZ$)</option>
+          </select>
+        </label>
+      </div>
+      <button type="submit" id="trip-submit-btn" class="primary-btn dialog-submit">Create trip ↗</button>
+    </form>
+  </dialog>
+
+  <!-- Expense Dialog -->
+  <dialog id="expense-dialog">
+    <form id="expense-form">
+      <input type="hidden" name="expense_id" id="expense-form-id" value="">
+      <div class="dialog-heading">
+        <h2 id="expense-dialog-title">Add an expense</h2>
+        <button type="button" class="close" aria-label="Close">×</button>
+      </div>
+      <label>
+        Description
+        <input name="description" id="expense-desc" placeholder="Dinner by the waterfront" maxlength="200" required>
+      </label>
+      <div class="form-row">
+        <label>
+          Amount
+          <input name="amount" id="expense-amount" type="number" min="0.01" step="0.01" placeholder="45.00" required>
+        </label>
+        <label>
+          Category
+          <select name="category" id="expense-cat">
+            <option value="Transport">Transport</option>
+            <option value="Stay">Stay</option>
+            <option value="Food">Food</option>
+            <option value="Activities">Activities</option>
+            <option value="Shopping">Shopping</option>
+            <option value="Other">Other</option>
+          </select>
+        </label>
+      </div>
+      <label>
+        Date
+        <input name="date" id="expense-date" type="date" required>
+      </label>
+      <button type="submit" id="expense-submit-btn" class="primary-btn dialog-submit">Save expense ↗</button>
+    </form>
+  </dialog>
+
+  <!-- Toast Container -->
+  <div id="toast" role="status" aria-live="polite" hidden></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
